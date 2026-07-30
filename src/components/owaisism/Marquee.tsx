@@ -25,7 +25,7 @@ export function Marquee({
   reverse = false,
   speed = "normal",
   variant = "default",
-  pauseOnHover = true,
+  pauseOnHover = false,
   className = "",
 }: MarqueeProps) {
   // Multiply items to ensure seamless infinite loop across wide screens
@@ -68,6 +68,7 @@ export function Marquee({
     >
       <motion.div
         className="marquee-track flex w-max items-center gap-8"
+        reducedMotion="never"
         animate={isPaused ? false : { x: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
         transition={{
           x: {
