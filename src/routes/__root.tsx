@@ -8,29 +8,62 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import Lenis from "lenis";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+    <main className="grain relative flex min-h-dvh flex-col items-center justify-center bg-background px-6 py-24 text-center overflow-hidden">
+      <div aria-hidden="true" className="hud-grid absolute inset-0 opacity-50" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, color-mix(in oklab, var(--color-neon) 18%, transparent), transparent 70%)",
+        }}
+      />
+
+      <div className="relative z-10 max-w-xl">
+        <span className="chip mb-8 inline-flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-neon animate-pulse" />
+          CHAPTER ??? — UNMAPPED PATH
+        </span>
+
+        <h1 className="holo font-display text-8xl font-bold tracking-tighter sm:text-9xl">
+          404
+        </h1>
+
+        <h2 className="glow-text mt-6 font-display text-2xl font-medium text-foreground sm:text-4xl">
+          You walked off the map.
+        </h2>
+
+        <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
+          Not every door leads to a standard room. In <span className="text-foreground font-medium">OWAISISM</span>, getting lost is just curiosity asking a better question.
         </p>
-        <div className="mt-6">
+
+        <p className="mt-4 font-mono text-xs text-muted-foreground/80">
+          "Every lock was created by someone — which means someone also understands the key."
+        </p>
+
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="sweep inline-flex items-center gap-3 rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-transform hover:scale-105"
           >
-            Go home
+            ← Return to the passage
+          </Link>
+          <Link
+            to="/tasbih"
+            className="inline-flex items-center gap-3 rounded-full border border-border bg-surface/40 px-7 py-3.5 font-mono text-xs tracking-[0.25em] uppercase text-foreground transition-colors hover:border-neon/50 hover:bg-secondary/50"
+          >
+            · tasbih ·
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -42,33 +75,50 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+    <main className="grain relative flex min-h-dvh flex-col items-center justify-center bg-background px-6 py-24 text-center overflow-hidden">
+      <div aria-hidden="true" className="hud-grid absolute inset-0 opacity-40" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, color-mix(in oklab, var(--color-ember) 18%, transparent), transparent 70%)",
+        }}
+      />
+
+      <div className="relative z-10 max-w-xl">
+        <span className="chip mb-8 inline-flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-ember animate-pulse" />
+          SYSTEM BREAK · UNEXPECTED STATE
+        </span>
+
+        <h1 className="font-display text-4xl font-medium tracking-tight text-foreground sm:text-6xl">
+          The machine paused.
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+
+        <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
+          Systems drift. Code stumbles. But nothing here is permanently broken. Take a breath, reset the state, or step back into the light.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
+
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <button
             onClick={() => {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="sweep inline-flex items-center gap-3 rounded-full bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-transform hover:scale-105"
           >
-            Try again
+            Re-enter passage
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="inline-flex items-center gap-3 rounded-full border border-border bg-surface/40 px-7 py-3.5 font-mono text-xs tracking-[0.25em] uppercase text-foreground transition-colors hover:border-ember/50 hover:bg-secondary/50"
           >
             Go home
           </a>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -98,7 +148,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Amiri:wght@400;700&display=swap",
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "shortcut icon", href: "/favicon.svg" },
     ],
   }),
 
@@ -121,8 +172,6 @@ function RootShell({ children }: { children: ReactNode }) {
     </html>
   );
 }
-
-import Lenis from "lenis";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
