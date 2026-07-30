@@ -365,7 +365,6 @@
 }
 
 @utility marquee-track {
-  animation: owais-marquee 30s linear infinite;
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;

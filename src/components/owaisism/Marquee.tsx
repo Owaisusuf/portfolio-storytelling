@@ -1,4 +1,5 @@
-import { type ReactNode } from "react";
+import { type ReactNode, useState } from "react";
+import { motion } from "motion/react";
 
 export type MarqueeVariant = "default" | "neon" | "ember" | "subtle" | "pills";
 
@@ -28,10 +29,15 @@ export function Marquee({
   className = "",
 }: MarqueeProps) {
   // Multiply items to ensure seamless infinite loop across wide screens
-  const doubled = [...items, ...items, ...items, ...items];
+  const doubled = [...items, ...items, ...items, ...items, ...items, ...items];
+  const [isPaused, setIsPaused] = useState(false);
 
-  const durationClass =
-    speed === "fast" ? "duration-[18s]" : speed === "slow" ? "duration-[45s]" : "duration-[30s]";
+  const durationMap = {
+    fast: 16,
+    normal: 28,
+    slow: 45,
+  };
+  const duration = durationMap[speed] || 28;
 
   const variantStyles = {
     default: "border-y border-border/70 py-5 bg-background/40 backdrop-blur-sm",
@@ -60,11 +66,19 @@ export function Marquee({
           "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
       }}
     >
-      <div
-        className={`marquee-track flex w-max items-center gap-8 ${durationClass} ${
-          pauseOnHover ? "hover:[animation-play-state:paused]" : ""
-        }`}
-        style={reverse ? { animationDirection: "reverse" } : undefined}
+      <motion.div
+        className="marquee-track flex w-max items-center gap-8"
+        animate={isPaused ? false : { x: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
+        transition={{
+          x: {
+            repeat: Infinity,
+            repeatType: "loop",
+            duration: duration,
+            ease: "linear",
+          },
+        }}
+        onMouseEnter={() => pauseOnHover && setIsPaused(true)}
+        onMouseLeave={() => pauseOnHover && setIsPaused(false)}
       >
         {doubled.map((item, i) => (
           <span key={i} className="flex items-center gap-8">
@@ -90,7 +104,7 @@ export function Marquee({
             )}
           </span>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }
