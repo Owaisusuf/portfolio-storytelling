@@ -28,8 +28,8 @@ export function Marquee({
   pauseOnHover = false,
   className = "",
 }: MarqueeProps) {
-  // Multiply items to ensure seamless infinite loop across wide screens
-  const doubled = [...items, ...items, ...items, ...items, ...items, ...items];
+  // Multiply items to ensure seamless infinite loop across wide screens (laptop, desktop, 4K)
+  const doubled = [...items, ...items, ...items, ...items, ...items, ...items, ...items, ...items];
   const [isPaused, setIsPaused] = useState(false);
 
   const durationMap = {
@@ -66,17 +66,13 @@ export function Marquee({
           "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
       }}
     >
-      <motion.div
-        className="marquee-track flex w-max items-center gap-8"
-        reducedMotion="never"
-        animate={isPaused ? false : { x: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
-        transition={{
-          x: {
-            repeat: Infinity,
-            repeatType: "loop",
-            duration: duration,
-            ease: "linear",
-          },
+      <div
+        className={`marquee-track flex w-max items-center gap-8 ${
+          reverse ? "marquee-animate-right" : "marquee-animate-left"
+        }`}
+        style={{
+          animationPlayState: isPaused ? "paused" : "running",
+          animationDuration: `${duration}s`,
         }}
         onMouseEnter={() => pauseOnHover && setIsPaused(true)}
         onMouseLeave={() => pauseOnHover && setIsPaused(false)}
@@ -105,7 +101,7 @@ export function Marquee({
             )}
           </span>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

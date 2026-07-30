@@ -21,14 +21,21 @@ export function ChapterRail() {
   const [active, setActive] = useState("top");
 
   useEffect(() => {
+    let ticking = false;
     const onScroll = () => {
-      const mid = window.innerHeight * 0.45;
-      let current = STOPS[0].id;
-      for (const stop of STOPS) {
-        const el = document.getElementById(stop.id);
-        if (el && el.getBoundingClientRect().top <= mid) current = stop.id;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const mid = window.innerHeight * 0.45;
+          let current = STOPS[0].id;
+          for (const stop of STOPS) {
+            const el = document.getElementById(stop.id);
+            if (el && el.getBoundingClientRect().top <= mid) current = stop.id;
+          }
+          setActive(current);
+          ticking = false;
+        });
+        ticking = true;
       }
-      setActive(current);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();

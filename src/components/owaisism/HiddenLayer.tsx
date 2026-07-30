@@ -20,13 +20,20 @@ export function HiddenLayer() {
 
   useEffect(() => {
     let buffer: string[] = [];
+    let ticking = false;
     const onKey = (e: KeyboardEvent) => {
       buffer = [...buffer, e.key].slice(-KONAMI.length);
       if (buffer.join("|").toLowerCase() === KONAMI.join("|").toLowerCase()) setUnlocked(true);
     };
     const onScroll = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? window.scrollY / max : 0);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          setProgress(max > 0 ? window.scrollY / max : 0);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     window.addEventListener("keydown", onKey);
     window.addEventListener("scroll", onScroll, { passive: true });

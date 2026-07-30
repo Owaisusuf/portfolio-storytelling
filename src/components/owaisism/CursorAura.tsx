@@ -12,6 +12,31 @@ export function CursorAura() {
     const target = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     const soft = { ...target };
     let raf = 0;
+    let isRunning = false;
+
+    const tick = () => {
+      const dx = target.x - soft.x;
+      const dy = target.y - soft.y;
+      soft.x += dx * 0.08;
+      soft.y += dy * 0.08;
+
+      if (auraRef.current) {
+        auraRef.current.style.transform = `translate3d(${soft.x}px, ${soft.y}px, 0) translate(-50%, -50%)`;
+      }
+
+      if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
+        isRunning = false;
+      } else {
+        raf = requestAnimationFrame(tick);
+      }
+    };
+
+    const startLoop = () => {
+      if (!isRunning) {
+        isRunning = true;
+        raf = requestAnimationFrame(tick);
+      }
+    };
 
     const onMove = (e: PointerEvent) => {
       target.x = e.clientX;
@@ -19,22 +44,14 @@ export function CursorAura() {
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
       }
-    };
-
-    const tick = () => {
-      soft.x += (target.x - soft.x) * 0.06;
-      soft.y += (target.y - soft.y) * 0.06;
-      if (auraRef.current) {
-        auraRef.current.style.transform = `translate3d(${soft.x}px, ${soft.y}px, 0) translate(-50%, -50%)`;
-      }
-      raf = requestAnimationFrame(tick);
+      startLoop();
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
-    raf = requestAnimationFrame(tick);
+    startLoop();
     return () => {
       window.removeEventListener("pointermove", onMove);
-      cancelAnimationFrame(raf);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, []);
 
@@ -42,13 +59,13 @@ export function CursorAura() {
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-40 hidden md:block">
       <div
         ref={auraRef}
-        className="absolute h-[34rem] w-[34rem] rounded-full opacity-70 blur-3xl"
+        className="absolute h-[28rem] w-[28rem] rounded-full opacity-60 blur-2xl will-change-transform"
         style={{
           background:
             "radial-gradient(circle, color-mix(in oklab, var(--color-glow) 16%, transparent), transparent 65%)",
         }}
       />
-      <div ref={dotRef} className="absolute h-2 w-2 rounded-full bg-primary/70 blur-[1px]" />
+      <div ref={dotRef} className="absolute h-2 w-2 rounded-full bg-primary/70 blur-[1px] will-change-transform" />
     </div>
   );
 }

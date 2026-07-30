@@ -176,7 +176,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
+  *:not(.marquee-track, .marquee-track *),
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
@@ -347,9 +347,13 @@
   --color-violet: var(--violet);
 }
 
-@keyframes owais-marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+@keyframes owais-marquee-left {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes owais-marquee-right {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
 }
 @keyframes owais-shimmer {
   from { background-position: 0% 50%; }
@@ -365,9 +369,20 @@
 }
 
 @utility marquee-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
+}
+
+@utility marquee-animate-left {
+  animation: owais-marquee-left var(--marquee-duration, 28s) linear infinite;
+}
+
+@utility marquee-animate-right {
+  animation: owais-marquee-right var(--marquee-duration, 28s) linear infinite;
 }
 
 /* Holographic gradient headline */

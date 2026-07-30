@@ -21,13 +21,13 @@ export function Starfield() {
     const pointer = { x: 0, y: 0 };
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       width = canvas.clientWidth;
       height = canvas.clientHeight;
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.round((width * height) / 7000);
+      const count = Math.min(Math.round((width * height) / 12000), 120);
       stars = Array.from({ length: count }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
